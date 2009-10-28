@@ -54,7 +54,7 @@ def test_add_types_custom_constructor():
 
 ### Test SQLInterp.interp() method.
 
-def test_sql_interp_no_whitespace2():
+def test_sql_interp_no_whitespace():
     # Whitespace should be added between arguments.
     sqli = SQLInterp()
 
