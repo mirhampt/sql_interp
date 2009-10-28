@@ -6,14 +6,14 @@ class SQLInterp(object):
     """
     The main sql_interp object.
     """
-    TYPE_MAP = { 
-        list: ListEsc,
-        tuple: ListEsc,
-        dict: DictEsc,
-    }
-
-    def __init__(self):
-        pass
+    def __init__(self, new_types=None):
+        self.type_map = { 
+            list: ListEsc,
+            tuple: ListEsc,
+            dict: DictEsc,
+        }
+        if new_types:
+            self.type_map.update(new_types)
 
     def interp(self, *args):
         """
@@ -73,7 +73,16 @@ class SQLInterp(object):
         >>> sqli.interp("SELECT * FROM table WHERE first_name =", sqli.esc(first_name))
         ('SELECT * FROM table WHERE first_name = ?', ('John',))
         """
-        if type(val) in self.TYPE_MAP:
-            return self.TYPE_MAP[type(val)](val)
+        if type(val) in self.type_map:
+            return self.type_map[type(val)](val)
         else:
             return Esc(val)
+
+    def add_types(self, new_types):
+        """
+        Add new custom types that can be interpolated by this object.
+
+        This method expects a dict that maps types (the keys) to their custom wrapper
+        classes (the values).  The wrapper classes must be a descendant of the Esc class.
+        """
+        self.type_map.update(new_types)

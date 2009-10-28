@@ -30,6 +30,28 @@ def test_esc_tuple():
     obj = sqli.esc((1,))
     eq_(type(obj), ListEsc)
 
+### Test SQLInterp.add_types() method.
+
+def test_add_types_custom():
+    sqli = SQLInterp()
+
+    class MyClass(object): pass
+    class MyClassEsc(Esc): pass
+
+    sqli.add_types({ MyClass: MyClassEsc })
+    
+    obj = sqli.esc(MyClass())
+    eq_(type(obj), MyClassEsc)
+
+def test_add_types_custom_constructor():
+    class MyClass(object): pass
+    class MyClassEsc(Esc): pass
+
+    sqli = SQLInterp({ MyClass: MyClassEsc })
+
+    obj = sqli.esc(MyClass())
+    eq_(type(obj), MyClassEsc)
+
 ### Test SQLInterp.interp() method.
 
 def test_sql_interp_no_whitespace2():
