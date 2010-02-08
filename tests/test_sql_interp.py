@@ -1,5 +1,5 @@
-from nose.tools import eq_, ok_, raises
-from sql_interp import UnknownTypeError, SQLInterp
+from nose.tools import eq_, ok_
+from sql_interp import SQLInterp
 from esc_types import Esc, ListEsc, DictEsc
 
 ### Test SQLInterp.esc() method.

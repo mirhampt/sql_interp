@@ -1,7 +1,5 @@
 from esc_types import Esc, ListEsc, DictEsc
 
-class UnknownTypeError(Exception): pass
-
 class SQLInterp(object):
     """
     The main sql_interp object.
