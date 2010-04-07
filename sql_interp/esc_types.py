@@ -1,4 +1,14 @@
+"""
+Contains Esc class and its subclasses.
+
+To make SQLInterp play nice with your custom objects, you may wish to subclass
+the Esc class.
+"""
 import re
+
+
+__all__ = ['Esc', 'ListEsc', 'DictEsc']
+
 
 # Regular expressions to determine context.
 # Borrowed directly from SQL::Interp.
@@ -10,14 +20,41 @@ FROM_JOIN_RE = re.compile(r'(?:\bFROM|JOIN)\s*$', RE_FLAGS)
 
 
 class UnknownContextError(Exception):
+    """
+    Raised when a value does not know how to insert itself into a given
+    context.
+    """
     pass
 
 
 class Esc(object):
+    """
+    An Esc object knows how to display its value in different SQL contexts.
+
+    Most Python types will be handled by a bundled subclass of Esc, but you may
+    wish to subclass Esc to handle a custom object.
+
+    To handle a custom object you will need to create a subclass of Esc and override
+    the following methods to return a SQL snippet and a tuple of bind values for
+    the specified context:
+
+    * ``in_ctxt``
+    * ``set_update_ctxt``
+    * ``insert_into_ctxt``
+    * ``from_join_ctxt``
+    * ``default_ctxt``
+    """
     def __init__(self, val):
         self.val = val
 
     def to_string(self, sql):
+        """
+        Returns a snippet of sql and a tuple of bind values.
+
+        Params::
+            sql     The SQL that precedes the point where the value is to
+                    be interpolated.
+        """
         if NOT_IN_RE.search(sql):
             return self.in_ctxt()
         elif SET_UPDATE_RE.search(sql):
@@ -30,18 +67,26 @@ class Esc(object):
             return self.default_ctxt()
 
     def in_ctxt(self):
+        "Handle the SQL 'IN/NOT IN' context."
         raise UnknownContextError("IN context not implemented for this type")
 
     def set_update_ctxt(self):
+        "Handle the SQL 'SET/UPDATE' context."
         raise UnknownContextError("SET/UPDATE context not implemented for this type")
 
     def insert_into_ctxt(self):
+        "Handle the SQL 'INSERT INTO' context."
         raise UnknownContextError("INSERT context not implemented for this type")
 
     def from_join_ctxt(self):
+        "Handle the SQL 'FROM/JOIN' context."
         raise UnknownContextError("FROM/JOIN context not implemented for this type")
 
     def default_ctxt(self):
+        """
+        If we don't know the context, just return a single placeholder and
+        bind value.
+        """
         if type(self.val) is str:
             bind = (self.val,)
         else:

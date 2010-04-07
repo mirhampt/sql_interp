@@ -1,4 +1,12 @@
+"""
+Contains the SQLInterp class.
+
+Most of your interaction with sql_interp will be through this class.
+"""
 from esc_types import Esc, ListEsc, DictEsc
+
+
+__all__ = ['SQLInterp']
 
 
 class SQLInterp(object):
