@@ -8,7 +8,10 @@ SET_UPDATE_RE = re.compile(r'\b(?:ON\s+DUPLICATE\s+KEY\s+UPDATE|SET)\s*$', RE_FL
 INSERT_INTO_RE = re.compile(r'\bINSERT[\w\s]*\sINTO\s*[a-zA-Z_][a-zA-Z0-9_\$\.]*\s*$', RE_FLAGS)
 FROM_JOIN_RE = re.compile(r'(?:\bFROM|JOIN)\s*$', RE_FLAGS)
 
-class UnknownContextError(Exception): pass
+
+class UnknownContextError(Exception):
+    pass
+
 
 class Esc(object):
     def __init__(self, val):
@@ -49,6 +52,7 @@ class Esc(object):
 
         return '?', bind
 
+
 class ListEsc(Esc):
     """
     >>> e = ListEsc(['one', 'two', 'three'])
@@ -84,6 +88,7 @@ class ListEsc(Esc):
     def default_ctxt(self):
         sql = '(' + ', '.join(['?' for _ in self.val]) + ')'
         return sql, self.val
+
 
 class DictEsc(Esc):
     """
@@ -142,7 +147,8 @@ class DictEsc(Esc):
                 # i.e. key IN (?, ?)
                 val_sql, val_bind = ListEsc(val).default_ctxt()
                 sql_bits.append(key + " IN " + val_sql)
-                for v in val_bind: bind.append(v)
+                for v in val_bind:
+                    bind.append(v)
             else:
                 sql_bits.append(key + " = ?")
                 bind.append(val)

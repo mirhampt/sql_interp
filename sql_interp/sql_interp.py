@@ -1,11 +1,12 @@
 from esc_types import Esc, ListEsc, DictEsc
 
+
 class SQLInterp(object):
     """
     The main sql_interp object.
     """
     def __init__(self, new_types=None):
-        self.type_map = { 
+        self.type_map = {
             list: ListEsc,
             tuple: ListEsc,
             dict: DictEsc,
