@@ -45,7 +45,7 @@ examples in this documentation.
 Examples
 ========
 
-The ``SQLInterp`` object can handle interpolating many different types.
+The ``SQLInterp`` object can handle interpolating many different types::
 
     >>> age = 25
     >>> first_names = ['Jenny', 'John', 'Jeremy']
@@ -53,7 +53,7 @@ The ``SQLInterp`` object can handle interpolating many different types.
     ('UPDATE people SET age = ? WHERE first_names IN (?, ?, ?)', (25, 'Jenny', 'John', 'Jeremy'))
 
 Interpolation is context sensitive, so the same type will be interpreted into SQL
-correctly for its usage.
+correctly for its usage::
 
     >>> punk_rockers = {'hair': 'pink', 'tattoos': 'three'}
     >>> accessories = {'piercings': 6, 'pants': 'vinyl'}
