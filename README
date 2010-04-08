@@ -1,3 +1,67 @@
-Interpolate python variables into SQL based upon context.
+==========
+sql_interp
+==========
 
-Indirect port of Perl's SQL::Interp.
+Safely and easily interpolate Python variables into SQL based upon context.  Most
+of your interaction with this package will be through the ``SQLInterp`` class::
+
+    >>> from sql_interp import SQLInterp
+
+    >>> person = {'last_name': 'Doe'}
+    >>> criteria = {'first_name': ['Jane', 'John']}
+
+    # Create an instance of SQLInterp and use the interp method to get the SQL and bind
+    # variables ready to pass to your database cursor.
+    >>> sqli = SQLInterp()
+    >>> sqli.interp("UPDATE people SET", person, "WHERE", criteria)
+    ('UPDATE people SET last_name = ? WHERE first_name IN (?, ?)', ('Doe', 'Jane', 'John'))
+
+Caution
+========
+
+sql_interp works by assuming that any non-string variables passed to ``interp`` need
+to be treated as bind variables.  This means that any arguments passed that are strings
+will be treated as raw SQL.  If you are not careful, this could lead to a SQL injection
+attack.  To avoid this, if there is any chance at all that a variable is a string, you
+must tell sql_interp that it is not raw SQL.  You can do this with the ``esc`` method of
+the ``SQLInterp`` object.
+
+Here is an example::
+
+    >>> sqli = SQLInterp()
+    >>> first_name = 'John'
+
+    # The following is wrong!  This could lead to a SQL injection attack.
+    >>> sqli.interp("SELECT * FROM table WHERE first_name =", first_name)
+    ('SELECT * FROM table WHERE first_name = John', ())
+
+    # This is the correct way.
+    >>> sqli.interp("SELECT * FROM table WHERE first_name =", sqli.esc(first_name))
+    ('SELECT * FROM table WHERE first_name = ?', ('John',))
+
+This does not apply if the string is a value in a list or dictionary as in the other
+examples in this documentation.
+
+Examples
+========
+
+The ``SQLInterp`` object can handle interpolating many different types.
+
+    # Interpolate an integer and a list.
+    >>> age = 25
+    >>> first_names = ['Jenny', 'John', 'Jeremy']
+    >>> sqli.interp("UPDATE people SET age =", age, "WHERE first_names IN", first_names)
+    ('UPDATE people SET age = ? WHERE first_names IN (?, ?, ?)', (25, 'Jenny', 'John', 'Jeremy'))
+
+Interpolation is context sensitive, so the same type will be interpreted into SQL
+correctly for its usage.
+
+    >>> punk_rockers = {'hair': 'pink', 'tattoos': 'three'}
+    >>> accessories = {'piercings': 6, 'pants': 'vinyl'}
+    >>> sqli.interp("UPDATE people SET", accessories, "WHERE", punk_rockers)
+    ('UPDATE people SET pants = ?, piercings = ? WHERE hair = ? AND tattoos = ?', ('vinyl', 6, 'pink', 'three'))
+
+Acknowledgments
+===============
+
+This project is an indirect port of Perl's `SQL::Interp <http://search.cpan.org/dist/SQL-Interp/>`_.
