@@ -47,7 +47,6 @@ Examples
 
 The ``SQLInterp`` object can handle interpolating many different types.
 
-    # Interpolate an integer and a list.
     >>> age = 25
     >>> first_names = ['Jenny', 'John', 'Jeremy']
     >>> sqli.interp("UPDATE people SET age =", age, "WHERE first_names IN", first_names)
