@@ -7,7 +7,7 @@ the Esc class.
 import re
 
 
-__all__ = ['Esc', 'ListEsc', 'DictEsc']
+__all__ = ['Esc', 'ListEsc', 'DictEsc', 'UnknownContextError']
 
 
 # Regular expressions to determine context.
@@ -100,25 +100,7 @@ class Esc(object):
 
 class ListEsc(Esc):
     """
-    >>> e = ListEsc(['one', 'two', 'three'])
-    >>> e.in_ctxt()
-    ('(?, ?, ?)', ('one', 'two', 'three'))
-
-    >>> e.set_update_ctxt()
-    Traceback (most recent call last):
-    ...
-    UnknownContextError: SET/UPDATE context not implemented for this type
-
-    >>> e.insert_into_ctxt()
-    ('VALUES (?, ?, ?)', ('one', 'two', 'three'))
-
-    >>> e.from_join_ctxt()
-    Traceback (most recent call last):
-    ...
-    UnknownContextError: FROM/JOIN context not implemented for this type
-
-    >>> e.default_ctxt()
-    ('(?, ?, ?)', ('one', 'two', 'three'))
+    Subclass of ``Esc`` to handle lists and tuples.
     """
     def __init__(self, val):
         self.val = tuple(val)
@@ -137,26 +119,7 @@ class ListEsc(Esc):
 
 class DictEsc(Esc):
     """
-    >>> e = DictEsc({'one' : 1, 'two' : 2, 'three' : 3})
-
-    >>> e.in_ctxt()
-    Traceback (most recent call last):
-    ...
-    UnknownContextError: IN context not implemented for this type
-
-    >>> e.set_update_ctxt()
-    ('one = ?, three = ?, two = ?', (1, 3, 2))
-
-    >>> e.insert_into_ctxt()
-    ('(one, three, two) VALUES (?, ?, ?)', (1, 3, 2))
-
-    >>> e.from_join_ctxt()
-    Traceback (most recent call last):
-    ...
-    UnknownContextError: FROM/JOIN context not implemented for this type
-
-    >>> e.default_ctxt()
-    ('one = ? AND three = ? AND two = ?', (1, 3, 2))
+    Subclass of ``Esc`` to handle dictionaries.
     """
     def __init__(self, val):
         self.val = val
