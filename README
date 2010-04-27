@@ -60,6 +60,11 @@ correctly for its usage::
     >>> sqli.interp("UPDATE people SET", accessories, "WHERE", punk_rockers)
     ('UPDATE people SET pants = ?, piercings = ? WHERE hair = ? AND tattoos = ?', ('vinyl', 6, 'pink', 'three'))
 
+Bug Reports
+===========
+
+Please report bugs via bitbucket's `issues tracker <http://bitbucket.org/mirhampt/sql_interp/issues>`_.
+
 Acknowledgments
 ===============
 
