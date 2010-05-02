@@ -50,8 +50,7 @@ class SQLInterp(object):
                 sql = _append_sql(sql, arg_sql)
                 bind += arg_bind
             else:
-                # Any argument given that is not a string or Esc
-                # is an error.
+                # If it is not a string or Esc object, try to escape it.
                 arg_sql, arg_bind = self.esc(arg).to_string(sql)
                 sql = _append_sql(sql, arg_sql)
                 bind += arg_bind
