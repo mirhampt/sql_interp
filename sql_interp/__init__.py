@@ -40,7 +40,7 @@ class SQLInterp(object):
                 return sql + ' ' + part
 
         for arg in args:
-            if type(arg) is str:
+            if isinstance(arg, basestring):
                 # Strings are treated as raw SQL.
                 sql = _append_sql(sql, arg)
             elif isinstance(arg, Esc):

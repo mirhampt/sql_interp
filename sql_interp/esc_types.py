@@ -87,7 +87,7 @@ class Esc(object):
         If we don't know the context, just return a single placeholder and
         bind value.
         """
-        if type(self.val) is str:
+        if isinstance(self.val, basestring):
             bind = (self.val,)
         else:
             try:

@@ -133,6 +133,14 @@ class SQLInterpTest(unittest.TestCase):
         self.assertEquals(sql, "SELECT * FROM table WHERE full_name = ?")
         self.assertEquals(bind, ('John Doe',))
 
+    def test_unicode(self):
+        "Test unicode strings."
+        full_name = u'John Doe'
+        sql, bind = self.sqli.interp(u"SELECT * FROM table WHERE full_name =",
+            self.sqli.esc(full_name))
+        self.assertEquals(sql, u"SELECT * FROM table WHERE full_name = ?")
+        self.assertEquals(bind, (u'John Doe',))
+
 
 if __name__ == "__main__":
     unittest.main()
