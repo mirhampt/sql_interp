@@ -24,8 +24,9 @@ class SQLInterp(object):
 
     def interp(self, *args):
         """
-        This method takes a list of SQL snippets and returns a SQL statement and
-        a list of bind variables to be passed to the DB API's execute method.
+        This method takes a list of SQL snippets and returns a SQL statement
+        and a list of bind variables to be passed to the DB API's execute
+        method.
         """
         sql = ""
         bind = ()
@@ -59,12 +60,13 @@ class SQLInterp(object):
 
     def esc(self, val):
         """
-        Returns the given object in the appropriate wrapper class from esc_types.py.
+        Returns the given object in the appropriate wrapper class from
+        esc_types.py.
 
-        In most cases, you will not need to call this directly.  However, if you are
-        passing a string to the interp method that should be used as an SQL bind value
-        and not raw SQL, you must pass it to this method to avoid a SQL injection
-        vulnerability.  For example:
+        In most cases, you will not need to call this directly.  However, if
+        you are passing a string to the interp method that should be used as an
+        SQL bind value and not raw SQL, you must pass it to this method to
+        avoid a SQL injection vulnerability.  For example:
 
         >>> sqli = SQLInterp()
         >>> first_name = 'John'
@@ -76,7 +78,8 @@ class SQLInterp(object):
 
         This is the correct way.
 
-        >>> sqli.interp("SELECT * FROM table WHERE first_name =", sqli.esc(first_name))
+        >>> sqli.interp("SELECT * FROM table WHERE first_name =",
+        ...     sqli.esc(first_name))
         ('SELECT * FROM table WHERE first_name = ?', ('John',))
         """
         if type(val) in self.type_map:
@@ -88,7 +91,8 @@ class SQLInterp(object):
         """
         Add new custom types that can be interpolated by this object.
 
-        This method expects a dict that maps types (the keys) to their custom wrapper
-        classes (the values).  The wrapper classes must be a descendant of the Esc class.
+        This method expects a dict that maps types (the keys) to their custom
+        wrapper classes (the values).  The wrapper classes must be a descendant
+        of the Esc class.
         """
         self.type_map.update(new_types)

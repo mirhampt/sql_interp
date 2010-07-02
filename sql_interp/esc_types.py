@@ -14,8 +14,10 @@ __all__ = ['Esc', 'ListEsc', 'DictEsc', 'UnknownContextError']
 # Borrowed directly from SQL::Interp.
 RE_FLAGS = re.S | re.I
 NOT_IN_RE = re.compile(r'\b(?:NOT\s+)?IN\s*$', RE_FLAGS)
-SET_UPDATE_RE = re.compile(r'\b(?:ON\s+DUPLICATE\s+KEY\s+UPDATE|SET)\s*$', RE_FLAGS)
-INSERT_INTO_RE = re.compile(r'\bINSERT[\w\s]*\sINTO\s*[a-zA-Z_][a-zA-Z0-9_\$\.]*\s*$', RE_FLAGS)
+SET_UPDATE_RE = re.compile(r'\b(?:ON\s+DUPLICATE\s+KEY\s+UPDATE|SET)\s*$',
+    RE_FLAGS)
+INSERT_INTO_RE = re.compile(
+    r'\bINSERT[\w\s]*\sINTO\s*[a-zA-Z_][a-zA-Z0-9_\$\.]*\s*$', RE_FLAGS)
 FROM_JOIN_RE = re.compile(r'(?:\bFROM|JOIN)\s*$', RE_FLAGS)
 
 
@@ -34,9 +36,9 @@ class Esc(object):
     Most Python types will be handled by a bundled subclass of Esc, but you may
     wish to subclass Esc to handle a custom object.
 
-    To handle a custom object you will need to create a subclass of Esc and override
-    the following methods to return a SQL snippet and a tuple of bind values for
-    the specified context:
+    To handle a custom object you will need to create a subclass of Esc and
+    override the following methods to return a SQL snippet and a tuple of bind
+    values for the specified context:
 
     * ``in_ctxt``
     * ``set_update_ctxt``
@@ -72,15 +74,18 @@ class Esc(object):
 
     def set_update_ctxt(self):
         "Handle the SQL 'SET/UPDATE' context."
-        raise UnknownContextError("SET/UPDATE context not implemented for this type")
+        raise UnknownContextError(
+            "SET/UPDATE context not implemented for this type")
 
     def insert_into_ctxt(self):
         "Handle the SQL 'INSERT INTO' context."
-        raise UnknownContextError("INSERT context not implemented for this type")
+        raise UnknownContextError(
+            "INSERT context not implemented for this type")
 
     def from_join_ctxt(self):
         "Handle the SQL 'FROM/JOIN' context."
-        raise UnknownContextError("FROM/JOIN context not implemented for this type")
+        raise UnknownContextError(
+            "FROM/JOIN context not implemented for this type")
 
     def default_ctxt(self):
         """
