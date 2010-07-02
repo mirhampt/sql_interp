@@ -9,6 +9,6 @@ setup(
     url='http://bitbucket.org/mirhampt/sql_interp/',
     license='MIT',
     description='Interpolate Python variables into SQL statements.',
-    long_description=open('README').read(),
+    long_description=open('README.rst').read(),
     keywords='sql interpolation database',
 )
